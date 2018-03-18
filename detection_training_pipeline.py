@@ -109,10 +109,6 @@ if __name__ == "__main__":
     cars = glob.glob('Training_data/vehicles/*/*.png')
     print("total number of cars: %i, notcars: %i " %(len(cars), len(notcars)))
 
-    # remember to convert png data to [0, 255] range
-    # image = mpimg.imread(notcars[0])
-    # print(img_as_ubyte(image[1:2,2:3]))
-
     # Reduce the sample size because
     # The quiz evaluator times out after 13s of CPU time
     #sample_size = 1000
@@ -126,7 +122,7 @@ if __name__ == "__main__":
     cell_per_block = 2 # HOG cells per block
     hog_channel = 'ALL' # Can be 0, 1, 2, or "ALL"
     spatial_size = (32, 32) # Spatial binning dimensions
-    hist_bins = 32#64    # Number of histogram bins
+    hist_bins = 64    # Number of histogram bins
     spatial_feat = True # Spatial features on or off
     hist_feat = True # Histogram features on or off
     hog_feat = True # HOG features on or off

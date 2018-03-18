@@ -115,16 +115,18 @@ def draw_labeled_bboxes(img, labels):
     # Return the image
     return img
 
-def filterBox(img, box_list):
-    # filter car positions and output heat map 
-    # generate heat map
+def getHeatmap(img, box_list):
+    # generate raw heat map
     heat = np.zeros_like(img[:,:,0]).astype(np.float)
 
     # Add heat to each box in box list
     heat = add_heat(heat,box_list)
-        
+    return heat
+
+def filterBox(img, heat):
+    # filter car positions and output new heat map 
     # Apply threshold to help remove false positives
-    heat = apply_threshold(heat,1)
+    heat = apply_threshold(heat,2)
 
     # Visualize the heatmap when displaying    
     heatmap = np.clip(heat, 0, 255)
@@ -138,7 +140,7 @@ def filterBox(img, box_list):
 
 if __name__ == "__main__":
     # load a pe-trained svc model from a serialized (pickle) file
-    modelname = "Trained_model/2018-03-17-trained_SVM.p"
+    modelname = "Trained_model/2018-03-18-trained_SVM.p"
     dist_pickle = pickle.load( open(modelname, "rb" ) )
 
     # get attributes of our svc object
@@ -159,8 +161,11 @@ if __name__ == "__main__":
     # find cars with sliding window    
     out_img, box_list = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins)
 
+    # get raw heatmap
+    heatmap_raw = getHeatmap(img, box_list)
+
     # filter car positions and output heat map    
-    draw_img, heatmap = filterBox(img, box_list)
+    draw_img, heatmap = filterBox(img, heatmap_raw)
 
 
     fig = plt.figure()

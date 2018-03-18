@@ -13,7 +13,7 @@ from lane_detection_pipeline.pp_transform import corners_unwarp
 from lane_detection_pipeline.lane_detection import evalPoly, thresholdIMG, findLanes, visualLane
 
 # modules for car detection
-from detection_validation_pipeline import find_cars, filterBox
+from detection_validation_pipeline import find_cars, filterBox, getHeatmap
 
 
 class lane:
@@ -50,30 +50,63 @@ class videoProcessor:
         # left and right lane object
         self.lL = lane()
         self.lR = lane()
+        # build heat map history
+        self.heatmaps = []
+
+    def updateHeatMap(self, newhp):
+        """
+        update heatmap (thresholded), store in memory
+        """
+        # averaging over past Nmax heatmaps
+        Nmax = 8
+        N = len(self.heatmaps)
+        if N<Nmax:
+            self.heatmaps.append(newhp)
+            N = N+1
+        else:
+            self.heatmaps.append(newhp)
+            self.heatmaps.pop(0)
+        return
+
+    def calHeatMap(self, newhp):
+        """
+        calculate weight heatmap using current and history
+        """
+        heatmap = newhp.copy()
+        scale = 0.5
+        N = len(self.heatmaps)
+        Knorm = 1.0
+        for i in range(N-1, -1, -1):
+            heatmap = heatmap +  scale*self.heatmaps[i]
+            Knorm = Knorm+scale
+            scale = scale*0.5
+        return heatmap/Knorm
+
+        
 
     def process_image_showlane(self, img):
         """
         process a single image, find lane, overlay the sliding window on top
         """
-        # convert float image to uint8, if image is loaded as float
-        # img = img_as_ubyte(img)
-        # threshold image
-        img_thresh = thresholdIMG(img)
-        # unwarp the image and get perspective transformation matrix
-        top_down, perspective_M = corners_unwarp(img_thresh, self.mtx, self.dist)
-        # find lane line pixels
-        pts, pts_raw, out_img = findLanes(top_down)
-        # update lane representation, this infomation can be used "hot" start the next sliding window
-        # self.lL = pts_raw[0]
-        # self.lR = pts_raw[2]
-        # visualize lane and parameters
-        result = visualLane(img, pts, pts_raw, perspective_M)
-        # overlay lane detection on the original image
-        # x 420 to 840, y 0 to 240
-        resized_img = cv2.resize(out_img, (420, 240)) 
-        for c in range(0, 3):
-            # overlay detection video with 0.5 transparentcy
-            result[0:240, 420:840, c] = (0.5*result[0:240, 420:840, c] + 0.5*resized_img[:, :, c])
+        # # convert float image to uint8, if image is loaded as float
+        # # img = img_as_ubyte(img)
+        # # threshold image
+        # img_thresh = thresholdIMG(img)
+        # # unwarp the image and get perspective transformation matrix
+        # top_down, perspective_M = corners_unwarp(img_thresh, self.mtx, self.dist)
+        # # find lane line pixels
+        # pts, pts_raw, out_img = findLanes(top_down)
+        # # update lane representation, this infomation can be used "hot" start the next sliding window
+        # # self.lL = pts_raw[0]
+        # # self.lR = pts_raw[2]
+        # # visualize lane and parameters
+        # result = visualLane(img, pts, pts_raw, perspective_M)
+        # # overlay lane detection on the original image
+        # # x 420 to 840, y 0 to 240
+        # resized_img = cv2.resize(out_img, (420, 240)) 
+        # for c in range(0, 3):
+        #     # overlay detection video with 0.5 transparentcy
+        #     result[0:240, 420:840, c] = (0.5*result[0:240, 420:840, c] + 0.5*resized_img[:, :, c])
 
 
         # overlay car detection on lane detection result
@@ -89,13 +122,18 @@ class videoProcessor:
         ystop = 656
         scale = 1.0
         
+        result = img.copy()
+
         # find cars with sliding window    
         out_img, box_list = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins)
 
+        # get raw heatmap
+        heatmap_raw = getHeatmap(result, box_list)
+        heatmap_weighted = self.calHeatMap(heatmap_raw)
+
         # filter car positions and output heat map    
-        draw_img, heatmap = filterBox(result, box_list)
-
-
+        draw_img, heatmap = filterBox(result, heatmap_weighted)
+        self.updateHeatMap(heatmap)
         return draw_img
 
 
