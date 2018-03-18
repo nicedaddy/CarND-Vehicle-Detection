@@ -66,6 +66,8 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
         file_features = []
         # Read in each one by one
         image = mpimg.imread(file)
+        if image.dtype == "uint8":
+            image = image.astype(np.float32)/255
         # apply color conversion if other than 'RGB'
         if color_space != 'RGB':
             if color_space == 'HSV':
@@ -77,7 +79,7 @@ def extract_features(imgs, color_space='RGB', spatial_size=(32, 32),
             elif color_space == 'YUV':
                 feature_image = cv2.cvtColor(image, cv2.COLOR_RGB2YUV)
             elif color_space == 'YCrCb':
-                feature_image = cv2.cvtColor(image, cv2.COLOR_RGB2YCrCb)
+                feature_image = cv2.cvtColor(image, cv2.COLOR_RGB2YCR_CB)
         else: feature_image = np.copy(image)      
 
         if spatial_feat == True:

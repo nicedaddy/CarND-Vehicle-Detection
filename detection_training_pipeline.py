@@ -38,7 +38,7 @@ def single_img_features(img, color_space='RGB', spatial_size=(32, 32),
         elif color_space == 'YUV':
             feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2YUV)
         elif color_space == 'YCrCb':
-            feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2YCrCb)
+            feature_image = cv2.cvtColor(img, cv2.COLOR_RGB2YCR_CB)
     else: feature_image = np.copy(img)      
     #3) Compute spatial features if flag is set
     if spatial_feat == True:
@@ -115,18 +115,18 @@ if __name__ == "__main__":
 
     # Reduce the sample size because
     # The quiz evaluator times out after 13s of CPU time
-    sample_size = 500
-    cars = cars[0:sample_size]
-    notcars = notcars[0:sample_size]
+    #sample_size = 1000
+    #cars = cars[0:sample_size]
+    #notcars = notcars[0:sample_size]
 
     ### TODO: Tweak these parameters and see how the results change.
-    color_space = 'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
-    orient = 9  # HOG orientations
+    color_space = 'YCrCb'#'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+    orient = 10#9  # HOG orientations
     pix_per_cell = 8 # HOG pixels per cell
     cell_per_block = 2 # HOG cells per block
-    hog_channel = 0 # Can be 0, 1, 2, or "ALL"
-    spatial_size = (16, 16) # Spatial binning dimensions
-    hist_bins = 16    # Number of histogram bins
+    hog_channel = 'ALL' # Can be 0, 1, 2, or "ALL"
+    spatial_size = (32, 32) # Spatial binning dimensions
+    hist_bins = 32#64    # Number of histogram bins
     spatial_feat = True # Spatial features on or off
     hist_feat = True # Histogram features on or off
     hog_feat = True # HOG features on or off
@@ -187,8 +187,13 @@ if __name__ == "__main__":
     if image.dtype == "uint8":
         image = image.astype(np.float32)/255
 
-    windows = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop, 
-                        xy_window=(96, 96), xy_overlap=(0.5, 0.5))
+    #windows = slide_window(image, x_start_stop=[None, None], y_start_stop=y_start_stop, 
+    #                    xy_window=(96, 96), xy_overlap=(0.5, 0.5))
+
+    yrange = [400, 656]
+    windows = slide_window(image, x_start_stop=[None, None], y_start_stop=yrange, 
+                        xy_window=(64, 64), xy_overlap=(0.75, 0.75))
+
 
     hot_windows = search_windows(image, windows, svc, X_scaler, color_space=color_space, 
                             spatial_size=spatial_size, hist_bins=hist_bins, 
