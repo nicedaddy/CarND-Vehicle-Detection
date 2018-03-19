@@ -110,7 +110,12 @@ Some examples of the detection pipeline are given below:
 ### Video Implementation
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+
+This car detection pipeline is applied on a video stream from a camera on the Udacity self-driving car. The identified cars are visualized with bounding boxes. In addition, the detection heat map and lane detection results are overlaid on the video.
+
+##### Final video (click on the image to view the youtube video)
+
+[![project][img7]](https://youtu.be/RbZO0yhE3YY)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
@@ -119,11 +124,7 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Final video (click on the image to view the youtube video)
 
-This car detection pipeline is applied on a video stream from a camera on the Udacity self-driving car. The identified cars are visualized with bounding boxes. In addition, the detection heat map and lane detection results are overlaid on the video.
-
-[![project][img7]](https://youtu.be/RbZO0yhE3YY)
 
 
 ```
