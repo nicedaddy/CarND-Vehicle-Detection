@@ -46,10 +46,10 @@ I then explored different color spaces and different `skimage.hog()` parameters 
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-I tried various combinations of parameters and...
+There are multiple colorspaces and different HOG parameters to tune. I tested mulitple combintions of these parameters, and decided to use the following paramters which gives the best validation result.
 
     ### Tweak these parameters and see how the results change.
-    color_space = 'YCrCb'#'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+    color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
     orient = 10#9  # HOG orientations
     pix_per_cell = 8 # HOG pixels per cell
     cell_per_block = 2 # HOG cells per block
@@ -62,12 +62,9 @@ I tried various combinations of parameters and...
     y_start_stop = [None, None] # Min and max in y to search in slide_window()
 
 
-
-
-
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
-I trained a linear SVM using...
+The training process is pretty much by trial and error. After exploring different colorspace and different HOG parameters, the highest testing accuracy I got is about 98% with the parameters listed above. (Note that more training data are added during the exploration phase, but the total numbers of cars and notcars are approximately the same)
 
 ```
 total number of cars: 8803, notcars: 9083 
@@ -81,7 +78,9 @@ total number of cars: 8803, notcars: 9083
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+The SVM classifier is able to make binary decision of car or not car. To identify the object in the image, a sliding window search algorithm is adopted to find the location of the object in the image.
+
+The sliding window approach has four parameters to tune, i.e., '[ystart, ystop, scale, cells_per_step]'. The 'ystart' and 'ystop' parameters crop out most of the trees, sky, and front part of the car. Larger 'scale' and 'cells_per_step' adopted for closer places, because closer cars are much larger in the figure. Finer search is performed for the further away part of the image. In the end, the following three sets of parameters are adopted for the sliding window search.
 
     # assign different scale for different ranges
     # [ystart, ystop, scale, cells_per_step]
@@ -91,11 +90,21 @@ I decided to search random window positions at random scales all over the image 
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Ultimately I searched on three scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result (with correct prediction and less false positives). The detection pipeline is outlined as follows:
+
+* Convert the image to YCrCb colorspace
+* Extract 3-channel HOG features plus spatially binned color and histograms of color in the feature vector
+* Apply sliding window search on the image with three different scales
+* Generate a heatmap of the identified boxes
+* Threshold the heatmap and identify labeled objects from the image
+* Plot boxes around the identified cars
+
+Some examples of the detection pipeline are given below:
 
 ![pipepline][img4]
 ![pipepline][img5]
 ![pipepline][img6]
+
 ---
 
 ### Video Implementation
