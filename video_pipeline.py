@@ -72,7 +72,7 @@ class videoProcessor:
         calculate weight heatmap using current and history
         """
         heatmap = newhp.copy()
-        discount = 0.5
+        discount = 0.6
         scale = 1.0*discount
         N = len(self.heatmaps)
         Knorm = 1.0
@@ -158,7 +158,7 @@ if __name__ == "__main__":
     # construct a video processor with calibration data
     #vp = videoProcessor("test_video.mp4", mtx, dist, svc_pickle)
     vp = videoProcessor("project_video.mp4", mtx, dist, svc_pickle)
-    #vp = videoProcessor("p1.mp4", mtx, dist, svc_pickle)
+    #vp = videoProcessor("p9.mp4", mtx, dist, svc_pickle)
 
 
     # start processing video and generate output video

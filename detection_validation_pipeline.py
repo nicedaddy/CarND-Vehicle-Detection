@@ -92,8 +92,9 @@ def find_cars(img, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_
                     ytop_draw = np.int(ytop*scale)
                     win_draw = np.int(window*scale)
                     drawbox = ((xbox_left, ytop_draw+ystart), (xbox_left+win_draw,ytop_draw+win_draw+ystart))
-                    # filter out false detections (100,700) (600, 400) 
-                    if drawbox[0][0] >= 100+(700-drawbox[0][1])*500./300:
+                    # filter false detections (100,700) (600, 400)
+                    # (1280 482), (1000, 450) 
+                    if (drawbox[0][0] >= 100+(700-drawbox[0][1])*500./300) and (drawbox[1][0] <= 1000+(drawbox[1][1]-450)*280./32):
                         # store a box list to generate heat map
                         box_list.append(drawbox)
                 
