@@ -1,5 +1,7 @@
 **Vehicle Detection Project**
 
+In this project, a SVM classifier is developed to detect cars for self-driving purposes. The SVM classifier is trained with 17000+ car and none car image datasets using Histogram of Oriented Gradients (HOG) and other features. The trained SVM is applied on the image using a sliding window approach. When applied on a video stream, the detection heatmap is constructed as a weighted average of multiple images to remove false detections. In the end, this vehicle detection pipeline successfully works on a video stream collected by a self-driving car. 
+
 The goals / steps of this project are the following:
 
 * Perform a Histogram of Oriented Gradients (HOG) feature extraction on a labeled training set of images and train a classifier Linear SVM classifier
@@ -10,16 +12,6 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[image1]: ./examples/car_not_car.png
-[image2]: ./examples/HOG_example.jpg
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
-
-
 [img1]: ./output_images/cars.png
 [img2]: ./output_images/notcar.png
 [img3]: ./output_images/pp7.png
@@ -31,6 +23,8 @@ The goals / steps of this project are the following:
 [img9]: ./output_images/hog2.png
 [img10]: ./output_images/hog3.png
 [img11]: ./output_images/hog4.png
+
+
 
 ### Histogram of Oriented Gradients (HOG)
 
@@ -123,7 +117,9 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
+### Final video (click on the image to view the youtube video)
+
+This car detection pipeline is applied on a video stream from a camera on the Udacity self-driving car. The identified cars are visualized with bounding boxes. In addition, the detection heat map and lane detection results are overlaid on the video.
 
 [![project][img7]](https://youtu.be/RbZO0yhE3YY)
 
