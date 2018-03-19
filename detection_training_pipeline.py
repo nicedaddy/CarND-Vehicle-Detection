@@ -25,6 +25,9 @@ def single_img_features(img, color_space='RGB', spatial_size=(32, 32),
                         hist_bins=32, orient=9, 
                         pix_per_cell=8, cell_per_block=2, hog_channel=0,
                         spatial_feat=True, hist_feat=True, hog_feat=True):    
+    # convert uint8 image to float32 (jpg image)
+    if img.dtype == "uint8":
+        img = img.astype(np.float32)/255    
     #1) Define an empty list to receive features
     img_features = []
     #2) Apply color conversion if other than 'RGB'
