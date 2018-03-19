@@ -30,14 +30,12 @@ The goals / steps of this project are the following:
 
 #### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
-The HOG feature of the image captures the gradient flow of the object. It represents a very distinctive signature of the car objects that we want to identify. 
-
-I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
+The HOG feature of the image captures the gradient flow of the object. It represents a very distinctive signature of the car objects that we want to identify. I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of five of each of the `vehicle` and `non-vehicle` classes:
 
 ![cars][img1]
 ![notcars][img2]
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`). After experimenting with different color spaces ('RGB', 'GRAY', 'YUV', 'LUV', and 'YCrCb'). It is observed that the 'YCrCb' color space gives the best validation accuracy. In the YCrCb colorspace, Y is the luminance information, Cb is the blue component, Cr is the red component. Some features of the training images in the 'YCrCb' color space is visualized as follows.
+I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`). After experimenting with different color spaces ('RGB', 'GRAY', 'YUV', 'LUV', and 'YCrCb'). It is observed that the 'YCrCb' color space gives the best validation accuracy. In the YCrCb colorspace, Y is the luminance information, Cb is the blue component, Cr is the red component. Some features of the training images in the 'YCrCb' color space are visualized as follows. (Note first two are not cars, last two are cars.)
 
 ![hog1][img8]
 ![hog2][img9]
@@ -46,7 +44,7 @@ I then explored different color spaces and different `skimage.hog()` parameters 
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
-There are multiple colorspaces and different HOG parameters to tune. I tested mulitple combintions of these parameters, and decided to use the following paramters which gives the best validation result.
+There are multiple colorspaces and different HOG parameters to tune. I tested mulitple combintions of these parameters, and decided to use the following paramters which gives the best validation accuracy.
 
     ### Tweak these parameters and see how the results change.
     color_space = 'YCrCb' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
@@ -80,7 +78,7 @@ total number of cars: 8803, notcars: 9083
 
 The SVM classifier is able to make binary decision of car or not car. To identify the object in the image, a sliding window search algorithm is adopted to find the location of the object in the image.
 
-The sliding window approach has four parameters to tune, i.e., '[ystart, ystop, scale, cells_per_step]'. The 'ystart' and 'ystop' parameters crop out most of the trees, sky, and front part of the car. Larger 'scale' and 'cells_per_step' adopted for closer places, because closer cars are much larger in the figure. Finer search is performed for the further away part of the image. In the end, the following three sets of parameters are adopted for the sliding window search.
+The sliding window approach has four parameters to tune, i.e., '[ystart, ystop, scale, cells_per_step]'. The 'ystart' and 'ystop' parameters crop out most of the trees, sky, and front part of the car. Larger 'scale' and 'cells_per_step' are adopted for closer places, because closer cars are much larger in the figure. Finer search is performed for the further away part of the image. In the end, the following three sets of parameters are adopted for the sliding window search.
 
     # assign different scale for different ranges
     # [ystart, ystop, scale, cells_per_step]
@@ -93,7 +91,7 @@ The sliding window approach has four parameters to tune, i.e., '[ystart, ystop, 
 Ultimately I searched on three scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result (with correct prediction and less false positives). The detection pipeline is outlined as follows:
 
 * Convert the image to YCrCb colorspace
-* Extract 3-channel HOG features plus spatially binned color and histograms of color in the feature vector
+* Extract 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, scale the feature vector the same way with the trainning data
 * Apply sliding window search on the image with three different scales
 * Generate a heatmap of the identified boxes
 * Threshold the heatmap and identify labeled objects from the image
@@ -120,7 +118,7 @@ This car detection pipeline is applied on a video stream from a camera on the Ud
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-The car detection pipeline was tuned based on the test images. It works very well on these finite set of images. However, when it is directly applied on the video stream, lots of false positives and misdetections appear. To address this issue, the detection heat map is generated, which stores the heatmap of the last six images in a sequence. 
+The car detection pipeline was tuned based on the test images. It works very well on these finite set of images. However, when it is directly applied on the video stream, lots of false positives and misdetections appear. To address this issue, the detection heatmaps stored, which includes the heatmaps of the last six images in a sequence. 
 
 ```
     def updateHeatMap(self, newhp):
@@ -138,7 +136,7 @@ The car detection pipeline was tuned based on the test images. It works very wel
         return
 ```
 
-The actual heatmap is calculated as a weighted average of the past six heatmaps. Then this discounting factor and the heatmap threshold parameter are tunned to make sure that false detections are filtered out and new cars are detected as soon as possible. (Note that small discount factor can heavily filter out false positives, but introduces a significant lag in the actual detection.)
+The actual heatmap is calculated as a weighted average of the past six heatmaps. Then this discounting factor and the heatmap threshold parameter are tunned to make sure that false detections are filtered out and new cars are detected as soon as possible. (Note that large discount factor can heavily filter out false positives, but introduces a significant lag in the actual detection.)
 
 ```
     def calHeatMap(self, newhp):
