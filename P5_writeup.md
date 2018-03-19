@@ -27,6 +27,10 @@ The goals / steps of this project are the following:
 [img5]: ./output_images/pp10.png
 [img6]: ./output_images/pp14.png
 [img7]: ./output_images/project.png
+[img8]: ./output_images/hog1.png
+[img9]: ./output_images/hog2.png
+[img10]: ./output_images/hog3.png
+[img11]: ./output_images/hog4.png
 
 ### Histogram of Oriented Gradients (HOG)
 
@@ -47,7 +51,8 @@ I then explored different color spaces and different `skimage.hog()` parameters 
 Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 
-
+YCbCr
+In this format, luminance information is stored as a single component (Y), and chrominance information is stored as two color-difference components (Cb and Cr). Cb represents the difference between the blue component and a reference value. Cr represents the difference between the red component and a reference value. (YUV, another color space widely used for digital video, is very similar to YCbCr but not identical.)
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
@@ -65,6 +70,12 @@ I tried various combinations of parameters and...
     hist_feat = True # Histogram features on or off
     hog_feat = True # HOG features on or off
     y_start_stop = [None, None] # Min and max in y to search in slide_window()
+
+
+![hog1][img8]
+![hog2][img9]
+![hog3][img10]
+![hog4][img11]
 
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
@@ -90,8 +101,6 @@ I decided to search random window positions at random scales all over the image 
     scaletable = [[400, 500, 1.0, 1],
                   [400, 600, 2.0, 1], 
                   [500, 656, 2.0, 2]]
-
-![alt text][image3]
 
 #### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
