@@ -124,6 +124,37 @@ This car detection pipeline is applied on a video stream from a camera on the Ud
 [![project][img7]](https://youtu.be/RbZO0yhE3YY)
 
 
+```
+    def updateHeatMap(self, newhp):
+        """
+        update heatmap (thresholded), store in memory
+        """
+        # averaging over past Nmax heatmaps
+        Nmax = 6
+        N = len(self.heatmaps)
+        if N<Nmax:
+            self.heatmaps.append(newhp)
+        else:
+            self.heatmaps.append(newhp)
+            self.heatmaps.pop(0)
+        return
+
+    def calHeatMap(self, newhp):
+        """
+        calculate weight heatmap using current and history
+        """
+        heatmap = newhp.copy()
+        discount = 0.7
+        scale = 1.0*discount
+        N = len(self.heatmaps)
+        Knorm = 1.0
+        for i in range(N-1, -1, -1):
+            heatmap = heatmap +  scale*self.heatmaps[i]
+            Knorm = Knorm+scale
+            scale = scale*discount
+        return heatmap/Knorm
+
+```
 
 ---
 
