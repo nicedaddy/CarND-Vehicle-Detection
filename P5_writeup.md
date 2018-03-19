@@ -136,11 +136,11 @@ The car detection pipeline was tuned based on the test images. It works very wel
             self.heatmaps.append(newhp)
             self.heatmaps.pop(0)
         return
-'''
+```
 
 The actual heatmap is calculated as a weighted average of the past six heatmaps. Then this discounting factor and the heatmap threshold parameter are tunned to make sure that false detections are filtered out and new cars are detected as soon as possible. (Note that small discount factor can heavily filter out false positives, but introduces a significant lag in the actual detection.)
 
-'''
+```
     def calHeatMap(self, newhp):
         """
         calculate weight heatmap using current and history
