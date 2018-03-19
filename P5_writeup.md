@@ -53,15 +53,41 @@ Here is an example using the `YCrCb` color space and HOG parameters of `orientat
 
 I tried various combinations of parameters and...
 
+    ### Tweak these parameters and see how the results change.
+    color_space = 'YCrCb'#'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
+    orient = 10#9  # HOG orientations
+    pix_per_cell = 8 # HOG pixels per cell
+    cell_per_block = 2 # HOG cells per block
+    hog_channel = 'ALL' # Can be 0, 1, 2, or "ALL"
+    spatial_size = (32, 32) # Spatial binning dimensions
+    hist_bins = 64    # Number of histogram bins
+    spatial_feat = True # Spatial features on or off
+    hist_feat = True # Histogram features on or off
+    hog_feat = True # HOG features on or off
+    y_start_stop = [None, None] # Min and max in y to search in slide_window()
+
+
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 I trained a linear SVM using...
+
+total number of cars: 8803, notcars: 9083 
+('Using:', 10, 'orientations', 8, 'pixels per cell and', 2, 'cells per block')
+('Feature vector length:', 9144)
+(32.3, 'Seconds to train SVC...')
+('Test Accuracy of SVC = ', 0.9852)
 
 ### Sliding Window Search
 
 #### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 
 I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+
+    # assign different scale for different ranges
+    # [ystart, ystop, scale, cells_per_step]
+    scaletable = [[400, 500, 1.0, 1],
+                  [400, 600, 2.0, 1], 
+                  [500, 656, 2.0, 2]]
 
 ![alt text][image3]
 

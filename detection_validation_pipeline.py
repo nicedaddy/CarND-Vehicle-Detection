@@ -19,12 +19,10 @@ def find_cars(img, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_
     
 
     # assign different scale for different ranges
+    # [ystart, ystop, scale, cells_per_step]
     scaletable = [[400, 500, 1.0, 1],
                   [400, 600, 2.0, 1], 
                   [500, 656, 2.0, 2]]
-    #scaletable = [[400, 600, 3.0, 2],
-    #              [400, 656, 2.0, 2]]
-    #scaletable = [[400, 500, 1.2, 1]]
     
     for param in scaletable:
         ystart = param[0]

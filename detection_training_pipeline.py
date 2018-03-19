@@ -118,7 +118,7 @@ if __name__ == "__main__":
     #cars = cars[0:sample_size]
     #notcars = notcars[0:sample_size]
 
-    ### TODO: Tweak these parameters and see how the results change.
+    ### Tweak these parameters and see how the results change.
     color_space = 'YCrCb'#'RGB' # Can be RGB, HSV, LUV, HLS, YUV, YCrCb
     orient = 10#9  # HOG orientations
     pix_per_cell = 8 # HOG pixels per cell
