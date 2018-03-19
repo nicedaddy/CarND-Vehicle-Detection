@@ -71,11 +71,13 @@ I tried various combinations of parameters and...
 
 I trained a linear SVM using...
 
+```
 total number of cars: 8803, notcars: 9083 
 ('Using:', 10, 'orientations', 8, 'pixels per cell and', 2, 'cells per block')
 ('Feature vector length:', 9144)
 (32.3, 'Seconds to train SVC...')
 ('Test Accuracy of SVC = ', 0.9852)
+```
 
 ### Sliding Window Search
 
