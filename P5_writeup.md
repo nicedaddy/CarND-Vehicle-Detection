@@ -21,11 +21,12 @@ The goals / steps of this project are the following:
 
 
 [img1]: ./output_images/cars.png
-[img2]: ./output_images/notcars.png
+[img2]: ./output_images/notcar.png
 [img3]: ./output_images/pp7.png
 [img4]: ./output_images/pp9.png
 [img5]: ./output_images/pp10.png
 [img6]: ./output_images/pp14.png
+[img7]: ./output_images/project.png
 
 ### Histogram of Oriented Gradients (HOG)
 
@@ -68,7 +69,6 @@ I decided to search random window positions at random scales all over the image 
 
 Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
 
-![pipepline][img3]
 ![pipepline][img4]
 ![pipepline][img5]
 ![pipepline][img6]
@@ -86,15 +86,9 @@ I recorded the positions of positive detections in each frame of the video.  Fro
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
 ### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
+
+[![project][img7]](https://youtu.be/RbZO0yhE3YY)
 
 
 
