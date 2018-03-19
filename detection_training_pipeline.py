@@ -177,6 +177,7 @@ if __name__ == "__main__":
     # Check the prediction time for a single sample
     t=time.time()
 
+    # visualize the effect of the trained SVM
     image = mpimg.imread('test_images/test4.jpg')
     draw_image = np.copy(image)
 

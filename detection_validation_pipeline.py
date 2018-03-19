@@ -184,6 +184,7 @@ if __name__ == "__main__":
     spatial_size = dist_pickle["spatial_size"]
     hist_bins = dist_pickle["hist_bins"]
 
+    # read in all test images
     testimgs = glob.glob('test_images/video*')
     for imgf in testimgs:
         img = mpimg.imread(imgf)
