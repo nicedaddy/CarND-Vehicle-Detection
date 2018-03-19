@@ -94,7 +94,7 @@ def find_cars(img, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_
                     drawbox = ((xbox_left, ytop_draw+ystart), (xbox_left+win_draw,ytop_draw+win_draw+ystart))
                     # filter false detections (100,700) (600, 400)
                     # (1280 482), (1000, 450) 
-                    if (drawbox[0][0] >= 100+(700-drawbox[0][1])*500./300) and (drawbox[1][0] <= 1000+(drawbox[1][1]-450)*280./32):
+                    if (drawbox[0][0] >= 100+(700-drawbox[0][1])*500./300) and (drawbox[1][0] <= 1000+(drawbox[1][1]-450)*280./35):
                         # store a box list to generate heat map
                         box_list.append(drawbox)
                 
@@ -150,7 +150,7 @@ def getHeatmap(img, box_list):
 def filterBox(img, heat):
     # filter car positions and output new heat map 
     # Apply threshold to help remove false positives
-    heat = apply_threshold(heat,4.5)
+    heat = apply_threshold(heat,3)
 
     # Visualize the heatmap when displaying    
     heatmap = np.clip(heat, 0, 255)
