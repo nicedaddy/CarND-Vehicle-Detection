@@ -32,21 +32,17 @@ The goals / steps of this project are the following:
 
 The HOG feature of the image captures the gradient flow of the object. It represents a very distinctive signature of the car objects that we want to identify. 
 
-
-The code for this step is contained in the first code cell of the IPython notebook (or in lines # through # of the file called `some_file.py`).  
-
 I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an example of one of each of the `vehicle` and `non-vehicle` classes:
 
 ![cars][img1]
 ![notcars][img2]
 
-I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
+I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`). After experimenting with different color spaces ('RGB', 'GRAY', 'YUV', 'LUV', and 'YCrCb'). It is observed that the 'YCrCb' color space gives the best validation accuracy. In the YCrCb colorspace, Y is the luminance information, Cb is the blue component, Cr is the red component. Some features of the training images in the 'YCrCb' color space is visualized as follows.
 
-Here is an example using the `YCrCb` color space and HOG parameters of `orientations=8`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
-
-
-YCbCr
-In this format, luminance information is stored as a single component (Y), and chrominance information is stored as two color-difference components (Cb and Cr). Cb represents the difference between the blue component and a reference value. Cr represents the difference between the red component and a reference value. (YUV, another color space widely used for digital video, is very similar to YCbCr but not identical.)
+![hog1][img8]
+![hog2][img9]
+![hog3][img10]
+![hog4][img11]
 
 #### 2. Explain how you settled on your final choice of HOG parameters.
 
@@ -66,10 +62,7 @@ I tried various combinations of parameters and...
     y_start_stop = [None, None] # Min and max in y to search in slide_window()
 
 
-![hog1][img8]
-![hog2][img9]
-![hog3][img10]
-![hog4][img11]
+
 
 
 #### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
@@ -166,5 +159,5 @@ In this project, we have developed a SVM classifier with a sliding window based 
 
 * Linear SVM model is used in this project to distinguish cars and nonecar objects. We get a validation accuracy of 0.9852 on about 17000 datasets. This dataset can be easily augmented by adding more training data from the internet. Also, a nonlinear SVM model can be used with different kernel functions. These changes can potentially make the classifier more accurate.  
 
-* We can also replace the SVM classifier with DNN models. DNN models allow us to have complex models with more flexibility. A very good option is to use [YOLO](https://pjreddie.com/darknet/yolo/) developed by the University of Washington.
+* We can also replace the SVM classifier with CNN models. CNN models allow us to have complex models with more flexibility. A very good option is to use [YOLO](https://pjreddie.com/darknet/yolo/) developed by the University of Washington.
 
