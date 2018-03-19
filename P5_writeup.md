@@ -135,5 +135,9 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+In this project, we have developed a SVM classifier with a sliding window based sampling approach to identify cars in the image. This detection pipeline can be applied in real-time to track cars from the front facing camera. However, there are still multiple places that can be improved.
+
+* Linear SVM model is used in this project to distinguish cars and nonecar objects. We get a validation accuracy of 0.9852 on about 17000 datasets. This dataset can be easily augmented by adding more training data from the internet. Also, a nonlinear SVM model can be used with different kernel functions. These changes can potentially make the classifier more accurate.  
+
+* We can also replace the SVM classifier with DNN models. DNN models allow us to have complex models with more flexibility. A very good option is to use [YOLO](https://pjreddie.com/darknet/yolo/) developed by the University of Washington.
 
