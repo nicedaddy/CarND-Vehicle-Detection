@@ -120,12 +120,7 @@ This car detection pipeline is applied on a video stream from a camera on the Ud
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
-
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
-
-
-
+The car detection pipeline was tuned based on the test images. It works very well on these finite set of images. However, when it is directly applied on the video stream, lots of false positives and misdetections appear. To address this issue, the detection heat map is generated, which stores the heatmap of the last six images in a sequence. 
 
 ```
     def updateHeatMap(self, newhp):
@@ -141,7 +136,11 @@ Here's an example result showing the heatmap from a series of frames of video, t
             self.heatmaps.append(newhp)
             self.heatmaps.pop(0)
         return
+'''
 
+The actual heatmap is calculated as a weighted average of the past six heatmaps. Then this discounting factor and the heatmap threshold parameter are tunned to make sure that false detections are filtered out and new cars are detected as soon as possible. (Note that small discount factor can heavily filter out false positives, but introduces a significant lag in the actual detection.)
+
+'''
     def calHeatMap(self, newhp):
         """
         calculate weight heatmap using current and history
